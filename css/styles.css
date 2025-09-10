@@ -4,6 +4,7 @@
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 body {
   background-color: #f0f0f0;
   color: #333;
@@ -13,11 +14,13 @@ body {
   justify-content: center;
   height: 100vh;
 }
+
 p {
   font-family: "cursive";
 }
+
 .install-card {
-  position: relative; /* Needed for absolute positioning inside */
+  position: relative;
   background-color: #e6f0ff;
   border-radius: 12px;
   padding: 20px 20px 60px 20px; /* Extra bottom padding for buttons */
@@ -25,6 +28,7 @@ p {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   font-family: "Segoe UI", sans-serif;
   animation: slideIn 0.3s ease-out;
+  display: none; /* Hidden by default */
 }
 
 .install-buttons {
@@ -55,6 +59,7 @@ p {
 .install-buttons button:hover {
   opacity: 0.9;
 }
+
 @keyframes slideIn {
   from {
     transform: translateY(20px);
@@ -65,11 +70,13 @@ p {
     opacity: 1;
   }
 }
+
 @media (max-width: 400px) {
   .install-card {
     width: 90%;
     padding: 15px 15px 50px 15px;
   }
+
   .install-buttons button {
     padding: 6px 10px;
     font-size: 12px;

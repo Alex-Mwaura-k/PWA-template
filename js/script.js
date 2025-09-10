@@ -9,6 +9,7 @@ let deferredPrompt = null;
 
 // Listen for beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('beforeinstallprompt event fired');
   e.preventDefault();           // Prevent default prompt
   deferredPrompt = e;           // Save event for later use
   showCustomInstallBanner();    // Show your custom install UI
