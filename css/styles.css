@@ -41,8 +41,8 @@ p {
   gap: 10px;
 }
 .install-buttons button {
-  background-color: #ffffff;
-  color: black;
+  background-color: #000000;
+  color: #ffffff;
   border: none;
   padding: 8px 12px;
   border-radius: 6px;
