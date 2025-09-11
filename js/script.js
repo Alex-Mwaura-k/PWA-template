@@ -64,3 +64,12 @@ function showCustomInstallBanner() {
 document.addEventListener('DOMContentLoaded', () => {
   showCustomInstallBanner();
 });
+
+// Hide banner once app is installed
+window.addEventListener('appinstalled', () => {
+  console.log('PWA installed');
+  const banner = document.getElementById('install-banner');
+  if (banner) {
+    banner.style.display = 'none';
+  }
+});
