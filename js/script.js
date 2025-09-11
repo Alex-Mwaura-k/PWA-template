@@ -28,16 +28,6 @@ function showCustomInstallBanner() {
   
   // Only show the banner if the app is not installed
   if (!window.matchMedia('(display-mode: standalone)').matches) {
-    // Check if 5 minutes have passed since the last time "Maybe Later" was clicked
-    const lastDismissTime = localStorage.getItem('installBannerDismissTime');
-    const now = Date.now();
-    
-    // If the "Maybe Later" button was clicked less than 5 minutes ago, hide the banner
-    if (lastDismissTime && (now - lastDismissTime < 2 * 60 * 1000)) {
-      console.log('Install banner hidden due to "Maybe Later"');
-      return; // Don't show the banner
-    }
-
     banner.style.display = 'block';
 
     // Install button click handler
@@ -54,8 +44,6 @@ function showCustomInstallBanner() {
     // Dismiss button click handler
     document.getElementById('dismiss-btn').addEventListener('click', () => {
       banner.style.display = 'none';
-      // Store the current time when "Maybe Later" is clicked
-      localStorage.setItem('installBannerDismissTime', Date.now().toString());
     });
   }
 }
