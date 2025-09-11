@@ -15,23 +15,47 @@ window.addEventListener('beforeinstallprompt', (e) => {
   showCustomInstallBanner();    // Show your custom install UI
 });
 
+// Check if the app is already installed (running in standalone mode)
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  console.log('App is installed');
+  // If the app is installed, hide the install banner
+  const banner = document.getElementById('install-banner');
+  banner.style.display = 'none';
+}
+
 function showCustomInstallBanner() {
   const banner = document.getElementById('install-banner');
-  banner.style.display = 'block';
-
-  // Install button click handler
-  document.getElementById('install-btn').addEventListener('click', async () => {
-    banner.style.display = 'none';
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const result = await deferredPrompt.userChoice;
-      console.log('User response:', result.outcome);
-      deferredPrompt = null;
+  
+  // Only show the banner if the app is not installed
+  if (!window.matchMedia('(display-mode: standalone)').matches) {
+    // Check if 5 minutes have passed since the last time "Maybe Later" was clicked
+    const lastDismissTime = localStorage.getItem('installBannerDismissTime');
+    const now = Date.now();
+    
+    // If the "Maybe Later" button was clicked less than 5 minutes ago, hide the banner
+    if (lastDismissTime && (now - lastDismissTime < 2 * 60 * 1000)) {
+      console.log('Install banner hidden due to "Maybe Later"');
+      return; // Don't show the banner
     }
-  });
 
-  // Dismiss button click handler
-  document.getElementById('dismiss-btn').addEventListener('click', () => {
-    banner.style.display = 'none';
-  });
+    banner.style.display = 'block';
+
+    // Install button click handler
+    document.getElementById('install-btn').addEventListener('click', async () => {
+      banner.style.display = 'none';
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        console.log('User response:', result.outcome);
+        deferredPrompt = null;
+      }
+    });
+
+    // Dismiss button click handler
+    document.getElementById('dismiss-btn').addEventListener('click', () => {
+      banner.style.display = 'none';
+      // Store the current time when "Maybe Later" is clicked
+      localStorage.setItem('installBannerDismissTime', Date.now().toString());
+    });
+  }
 }
