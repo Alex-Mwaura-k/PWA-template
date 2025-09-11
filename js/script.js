@@ -15,23 +15,33 @@ window.addEventListener('beforeinstallprompt', (e) => {
   showCustomInstallBanner();    // Show your custom install UI
 });
 
-// Check if the app is already installed (running in standalone mode)
-if (window.matchMedia('(display-mode: standalone)').matches) {
-  console.log('App is installed');
-  // If the app is installed, hide the install banner
-  const banner = document.getElementById('install-banner');
-  banner.style.display = 'none';
+// Function to check if app is running in standalone mode
+function isAppInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 }
 
 function showCustomInstallBanner() {
   const banner = document.getElementById('install-banner');
-  
-  // Only show the banner if the app is not installed
-  if (!window.matchMedia('(display-mode: standalone)').matches) {
+  const installBtn = document.getElementById('install-btn');
+  const dismissBtn = document.getElementById('dismiss-btn');
+
+  // If the app is already installed (standalone mode), show "Open in App" button
+  if (isAppInstalled()) {
+    console.log('App is already installed');
+    banner.style.display = 'none'; // Hide the install banner
+    // Change button to "Open in App"
+    installBtn.textContent = 'Open in App';
+    installBtn.onclick = () => {
+      // Handle app opening (e.g., direct to the home screen app)
+      window.location.href = '/'; // or any entry point for your app
+    };
+  } else {
+    // Only show the banner if the app is not installed
     banner.style.display = 'block';
 
     // Install button click handler
-    document.getElementById('install-btn').addEventListener('click', async () => {
+    installBtn.textContent = 'Install App';
+    installBtn.addEventListener('click', async () => {
       banner.style.display = 'none';
       if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -41,9 +51,16 @@ function showCustomInstallBanner() {
       }
     });
 
-    // Dismiss button click handler
-    document.getElementById('dismiss-btn').addEventListener('click', () => {
+    // Dismiss button click handler (Maybe Later)
+    dismissBtn.addEventListener('click', () => {
       banner.style.display = 'none';
+      // Store the current time when "Maybe Later" is clicked
+      localStorage.setItem('installBannerDismissTime', Date.now().toString());
     });
   }
 }
+
+// Run the check on page load to hide the banner if needed
+document.addEventListener('DOMContentLoaded', () => {
+  showCustomInstallBanner();
+});
